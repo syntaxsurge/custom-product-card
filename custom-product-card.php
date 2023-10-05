@@ -22,11 +22,11 @@ function cpc_shortcode($atts) {
     // Ensure all attributes are sanitized
     $atts = shortcode_atts(
         array(
-            'link' => 'https://example.com',
+            'link' => 'https://syntaxsurge.com',
             'img1' => '',
             'img2' => '',
             'name' => 'Sample Product Name',
-            'show_tag' => 'true' // new attribute
+            'show_tag' => 'true'
         ),
         $atts,
         'product_card'
@@ -53,8 +53,21 @@ function cpc_shortcode($atts) {
             ?>
             <div class="product-content">
                 <div class="product-images">
-                    <img src="<?php echo $img1; ?>" alt="Product 1">
-                    <img src="<?php echo $img2; ?>" alt="Product 2">
+                    <?php 
+                    // Check if img1 is provided and render image
+                    if (!empty($img1)) : 
+                    ?>
+                        <img src="<?php echo $img1; ?>" alt="Product 1">
+                    <?php 
+                    endif; 
+
+                    // Check if img2 is provided and render image
+                    if (!empty($img2)) : 
+                    ?>
+                        <img src="<?php echo $img2; ?>" alt="Product 2">
+                    <?php 
+                    endif; 
+                    ?>
                 </div>
                 <div class="product-name"><?php echo esc_html($name); ?></div>
             </div>
