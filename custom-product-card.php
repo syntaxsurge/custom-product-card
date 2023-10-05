@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Custom Product Card
+ * Plugin Name: Custom Product Card By SyntaxSurge
  * Plugin URI: https://syntaxsurge.com/product/custom-product-card
  * Description: A custom plugin to add a product card via a shortcode.
  * Version: 1.0
