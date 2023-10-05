@@ -17,7 +17,7 @@ function cpc_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'cpc_enqueue_styles');
 
-// Shortcode [product_card link="" img1="" img2="" name=""]
+// Shortcode [product_card link="" img1="" img2="" name="" show_tag="true"]
 function cpc_shortcode($atts) {
     // Ensure all attributes are sanitized
     $atts = shortcode_atts(
@@ -26,6 +26,7 @@ function cpc_shortcode($atts) {
             'img1' => '',
             'img2' => '',
             'name' => 'Sample Product Name',
+            'show_tag' => 'true' // new attribute
         ),
         $atts,
         'product_card'
@@ -36,12 +37,20 @@ function cpc_shortcode($atts) {
     $img1 = esc_url($atts['img1']);
     $img2 = esc_url($atts['img2']);
     $name = sanitize_text_field($atts['name']);
+    $show_tag = filter_var($atts['show_tag'], FILTER_VALIDATE_BOOLEAN); // converting to boolean
 
     ob_start();
     ?>
     <a href="<?php echo $link; ?>" class="product-card-link" target="_blank">
         <div class="product-card">
-            <div class="recommendation-tag">RECOMMENDED PRODUCT</div>
+            <?php 
+            // Check if tag should be displayed
+            if($show_tag) : 
+            ?>
+                <div class="recommendation-tag">RECOMMENDED PRODUCT</div>
+            <?php 
+            endif; 
+            ?>
             <div class="product-content">
                 <div class="product-images">
                     <img src="<?php echo $img1; ?>" alt="Product 1">
