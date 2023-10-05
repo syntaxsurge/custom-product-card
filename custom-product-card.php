@@ -25,7 +25,7 @@ function cpc_shortcode($atts) {
             'link' => 'https://syntaxsurge.com',
             'img1' => '',
             'img2' => '',
-            'name' => 'Sample Product Name',
+            'name' => '',
             'show_tag' => 'true'
         ),
         $atts,
@@ -38,6 +38,24 @@ function cpc_shortcode($atts) {
     $img2 = esc_url($atts['img2']);
     $name = sanitize_text_field($atts['name']);
     $show_tag = filter_var($atts['show_tag'], FILTER_VALIDATE_BOOLEAN); // converting to boolean
+
+    // Check if name is empty and link contains amazon.com/s
+    if(empty($name) && strpos($link, 'amazon.com/s') !== false) {
+        // Parse the URL and query string
+        $parsed_url = parse_url($link);
+        parse_str($parsed_url['query'], $query_params);
+
+        // Check if the 'k' query parameter exists and is not empty
+        if(!empty($query_params['k'])) {
+            // Decode the URL parameter, convert to title case, and sanitize for use
+            $name = sanitize_text_field(title_case(urldecode($query_params['k'])));
+        }
+    }
+    
+    // If name is still empty, then make the URL the Name
+    if(empty($name) && !empty($link)) {
+        $name = $link;
+    }
 
     ob_start();
     ?>
@@ -75,5 +93,10 @@ function cpc_shortcode($atts) {
     </a>
     <?php
     return ob_get_clean();
+}
+
+function title_case($str) {
+    // Converts string to title case
+    return ucwords(strtolower($str));
 }
 add_shortcode('product_card', 'cpc_shortcode');
